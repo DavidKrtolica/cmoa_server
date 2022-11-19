@@ -1,5 +1,6 @@
 import { gql } from 'apollo-server-express';
 import * as artworkData from '../data/artworkData.js';
+import * as artistData from '../data/artistData.js';
 
 // The graphql schema
 export const typeDefs = gql`
@@ -19,9 +20,21 @@ export const typeDefs = gql`
       submittedAt: String!
    }
 
+   type Artist {
+      id: ID!
+      fullName: String!
+      citedName: String
+      nationality: String
+      birthDate: String
+      birthPlace: String
+      deathPlace: String
+    }
+
    type Query {
       artwork(id: ID!): Artwork!
       artworks: [Artwork]!
+      artist(id: ID!): Artist!
+      artists: [Artist]!
    }
 `;
 
@@ -34,5 +47,11 @@ export const resolvers = {
          return result;
       },
       artworks: () => artworkData.fetchAll(),
+      artist: async (_, { id }) => {
+         const result = await artistData.fetchById(id);
+         console.log(result);
+         return result;
+      },
+      artists: () => artistData.fetchAll(),
    },
 };
