@@ -10,7 +10,7 @@ const seedArtworks = [
       itemDiameter: 0.0,
       artistNote: 'Lights shining in your eyes',
       image: 'https://images.unsplash.com/photo-1541680670548-88e8cd23c0f4',
-      creatorId: '1'
+      creatorId: 'd14bb9fc-65dc-11ed-967a-931420ba6ae2'
    },
    {
       title: 'Vitamin Chaos',
@@ -23,7 +23,7 @@ const seedArtworks = [
       itemDiameter: 0.0,
       artistNote: 'Take ur viataminz',
       image: 'https://images.unsplash.com/photo-1618913001611-2054733f4aa8',
-      creatorId: '2'
+      creatorId: 'd14bc19a-65dc-11ed-967a-ab9e22dda3a3'
    },
    {
       title: 'Spiked',
@@ -36,7 +36,7 @@ const seedArtworks = [
       itemDiameter: 0.0,
       artistNote: 'For Linda',
       image: 'https://images.unsplash.com/photo-1590621819878-3fa04495626c',
-      creatorId: '3' 
+      creatorId: 'd14bc230-65dc-11ed-967a-6ffdda8dcde8' 
    },
    {
       title: 'Vehicle',
@@ -49,7 +49,7 @@ const seedArtworks = [
       itemDiameter: 0.0,
       artistNote: 'artistNote is a short sentence from the artist about the artwork, if relevant',
       image: 'https://images.unsplash.com/photo-1590622974113-66a9160acf20',
-      creatorId: '4'
+      creatorId: 'd14bc2a8-65dc-11ed-967a-9300e6f1c4fe'
    },
    {
       title: 'Losing the grip',
@@ -62,7 +62,7 @@ const seedArtworks = [
       itemDepth: 3.0,
       itemDiameter: 0.0,
       image: 'https://images.unsplash.com/photo-1533122250115-6bb28e9a48c3',
-      creatorId: '5'
+      creatorId: 'd14bc316-65dc-11ed-967a-13759b11a418'
    }
 ];
 
