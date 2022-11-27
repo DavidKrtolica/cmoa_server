@@ -14,7 +14,7 @@ router.post('/register', async (req, res) => {
       const account = await accountData.fetchByEmail(req.body.email);
       if (account) {
          res.status(403).send({
-            message: 'Email address is already in use',
+            error: 'Email address is already in use',
          });
       } else {
          //Password hashing
@@ -28,14 +28,14 @@ router.post('/register', async (req, res) => {
                });
 
                res.status(201).send({
-                  message: 'Account successfully created',
-                  account: account,
+                  success: 'Account successfully created',
+                  //account: account,
                });
             });
          });
       }
    } catch (error) {
-      res.status(500).send({ message: error.message });
+      res.status(500).send({ error: error.message });
    }
 });
 
@@ -43,7 +43,7 @@ router.post('/login', async (req, res) => {
    try {
       const account = await accountData.fetchByEmail(req.body.email);
       if (!account) {
-         res.status(401).send({ message: 'Invalid email' });
+         res.status(401).send({ error: 'Invalid email' });
       } else {
          const hash = account.hash;
          const id = account.id;
@@ -64,9 +64,10 @@ router.post('/login', async (req, res) => {
                   token: token,
                   id: account.id,
                   email: account.email,
+                  role: account.role,
                });
             } else {
-               res.status(401).send({ message: 'Invalid password' });
+               res.status(401).send({ error: 'Invalid password' });
             }
          });
       }
