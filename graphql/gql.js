@@ -28,7 +28,7 @@ export const typeDefs = gql`
       birthDate: String
       birthPlace: String
       deathPlace: String
-    }
+   }
 
    type Query {
       artwork(id: ID!): Artwork!
@@ -43,13 +43,11 @@ export const resolvers = {
    Query: {
       artwork: async (_, { id }) => {
          const result = await artworkData.fetchById(id);
-         console.log(result);
          return result;
       },
       artworks: () => artworkData.fetchAll(),
       artist: async (_, { id }) => {
          const result = await artistData.fetchById(id);
-         console.log(result);
          return result;
       },
       artists: () => artistData.fetchAll(),
