@@ -16,6 +16,6 @@ const apolloServer = new ApolloServer({ typeDefs, resolvers });
 await apolloServer.start();
 apolloServer.applyMiddleware({ app });
 
-app.listen({ port: 8080 }, () =>
+app.listen({ port: process.env.PORT || 8080 }, () =>
    console.log(`🚀 Server ready at http://localhost:8080/graphql`)
 );
