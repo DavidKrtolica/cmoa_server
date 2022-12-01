@@ -7,3 +7,20 @@ export const fetchById = async (id) => {
 export const fetchAll = async () => {
    return await db.select('*').from('artist');
 };
+
+export const fetchByArtworkId = async (artworkId) => {
+   return await db
+      .select(
+         'artist.id',
+         'artist.fullName',
+         'artist.citedName',
+         'artist.nationality',
+         'artist.birthPlace',
+         'artist.birthDate',
+         'artist.deathDate'
+      )
+      .from('artist')
+      .innerJoin('artwork', 'artwork.creatorId', 'artist.id')
+      .where('artwork.id', artworkId)
+      .first();
+};

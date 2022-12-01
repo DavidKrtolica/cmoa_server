@@ -30,11 +30,17 @@ export const typeDefs = gql`
       deathPlace: String
    }
 
+   type ArtworkPage {
+      artwork: Artwork!
+      artist: Artist!
+   }
+
    type Query {
       artwork(id: ID!): Artwork!
       artworks: [Artwork]!
       artist(id: ID!): Artist!
       artists: [Artist]!
+      artworkPage(artworkId: ID!): ArtworkPage!
    }
 `;
 
@@ -51,5 +57,13 @@ export const resolvers = {
          return result;
       },
       artists: () => artistData.fetchAll(),
+      artworkPage: async (_, { artworkId }) => {
+         const artwork = await artworkData.fetchById(artworkId);
+         const artist = await artistData.fetchByArtworkId(artworkId);
+         return {
+            artwork,
+            artist,
+         };
+      },
    },
 };
