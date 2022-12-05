@@ -11,7 +11,11 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/auth', authRouter);
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers, introspection: process.env.NODE_ENV === 'production' });
+const apolloServer = new ApolloServer({
+   typeDefs,
+   resolvers,
+   //introspection: process.env.NODE_ENV === 'production',
+});
 
 await apolloServer.start();
 apolloServer.applyMiddleware({ app });

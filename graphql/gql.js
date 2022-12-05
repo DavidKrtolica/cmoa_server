@@ -28,11 +28,17 @@ export const typeDefs = gql`
       birthDate: String
       birthPlace: String
       deathPlace: String
+      artworksCount: Int
    }
 
    type ArtworkPage {
       artwork: Artwork!
       artist: Artist!
+   }
+
+   type ArtistPage {
+      artist: Artist!
+      artworks: [Artwork]
    }
 
    type Query {
@@ -41,11 +47,17 @@ export const typeDefs = gql`
       artist(id: ID!): Artist!
       artists: [Artist]!
       artworkPage(artworkId: ID!): ArtworkPage!
+      artistPage(artistId: ID!): ArtistPage!
    }
 `;
 
 // Resolvers for the types defined in the schema
 export const resolvers = {
+   Artist: {
+      artworksCount: async (parent) => {
+         return await artworkData.countByArtist(parent.id);
+      },
+   },
    Query: {
       artwork: async (_, { id }) => {
          const result = await artworkData.fetchById(id);
@@ -63,6 +75,14 @@ export const resolvers = {
          return {
             artwork,
             artist,
+         };
+      },
+      artistPage: async (_, { artistId }) => {
+         const artist = await artistData.fetchById(artistId);
+         const artworks = await artworkData.fetchByArtist(artistId);
+         return {
+            artist,
+            artworks,
          };
       },
    },
