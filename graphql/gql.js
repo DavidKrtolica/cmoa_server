@@ -43,7 +43,7 @@ export const typeDefs = gql`
 
    type Query {
       artwork(id: ID!): Artwork!
-      artworks: [Artwork]!
+      artworks(search: String): [Artwork]!
       artist(id: ID!): Artist!
       artists: [Artist]!
       artworkPage(artworkId: ID!): ArtworkPage!
@@ -63,7 +63,10 @@ export const resolvers = {
          const result = await artworkData.fetchById(id);
          return result;
       },
-      artworks: () => artworkData.fetchAll(),
+      artworks: async (_, { search }) => {
+         const result = await artworkData.fetch(search);
+         return result;
+      },
       artist: async (_, { id }) => {
          const result = await artistData.fetchById(id);
          return result;

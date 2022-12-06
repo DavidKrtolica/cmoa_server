@@ -12,6 +12,17 @@ export const fetchByArtist = async (artistId) => {
    return await db.select('*').from('artwork').where('creatorId', artistId);
 };
 
+export const fetch = async (search) => {
+   const query = db.select('artwork.*').from('artwork');
+   if (search) {
+      query
+         .whereILike('title', `%${search}%`)
+         .orWhereILike('medium', `%${search}%`)
+         .orWhereILike('curatorDescription', `%${search}%`);
+   }
+   return await query;
+};
+
 export const countByArtist = async (artistId) => {
    const result = await db
       .count()
