@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 import * as accountData from '../data/accountData.js';
+import * as profileData from '../data/profileData.js';
 
 const SALT_ROUNDS = 10;
 const router = express.Router();
@@ -58,13 +59,15 @@ router.post('/login', async (req, res) => {
             }
          );
 
-         bcrypt.compare(req.body.password, hash, (error, isMatching) => {
+         bcrypt.compare(req.body.password, hash, async (error, isMatching) => {
             if (isMatching) {
+               const profile = await profileData.fetchByAccountId(account.id);
                res.status(200).send({
                   token: token,
                   id: account.id,
                   email: account.email,
                   role: account.role,
+                  isLive: profile ? true : false,
                });
             } else {
                res.status(401).send({ error: 'Invalid password' });
