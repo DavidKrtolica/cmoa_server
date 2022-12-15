@@ -4,7 +4,7 @@ export const up = async function (knex) {
       table.string('firstName');
       table.string('lastName');
       table.string('phone');
-      table.integer('age');
+      table.date('birthDate');
       table.string('gender');
       /**
        * Would need to ensure address has thie following json format
