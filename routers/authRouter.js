@@ -1,6 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import * as Sentry from '@sentry/node';
 
 import * as accountData from '../data/accountData.js';
 
@@ -13,6 +14,7 @@ router.post('/register', async (req, res) => {
       //Check for duplicate username or email
       const account = await accountData.fetchByEmail(req.body.email);
       if (account) {
+         Sentry.captureMessage('Trying register with an already existing email address - failed!');
          res.status(403).send({
             error: 'Email address is already in use',
          });
@@ -35,6 +37,7 @@ router.post('/register', async (req, res) => {
          });
       }
    } catch (error) {
+      Sentry.captureException(error);
       res.status(500).send({ error: error.message });
    }
 });
@@ -43,6 +46,7 @@ router.post('/login', async (req, res) => {
    try {
       const account = await accountData.fetchByEmail(req.body.email);
       if (!account) {
+         Sentry.captureMessage('Trying login with an invalid email address - failed!');
          res.status(401).send({ error: 'Invalid email' });
       } else {
          const hash = account.hash;
@@ -67,11 +71,13 @@ router.post('/login', async (req, res) => {
                   role: account.role,
                });
             } else {
+               Sentry.captureMessage('Trying login with wrong password - failed!');
                res.status(401).send({ error: 'Invalid password' });
             }
          });
       }
    } catch (error) {
+      Sentry.captureException(error);
       res.status(500).send({ message: error.message });
    }
 });
