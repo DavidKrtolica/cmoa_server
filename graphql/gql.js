@@ -1,6 +1,8 @@
 import { gql } from 'apollo-server-express';
 import * as artworkData from '../data/artworkData.js';
 import * as artistData from '../data/artistData.js';
+import * as profileData from '../data/profileData.js';
+import * as accountData from '../data/accountData.js';
 
 // The graphql schema
 export const typeDefs = gql`
@@ -31,6 +33,32 @@ export const typeDefs = gql`
       artworksCount: Int
    }
 
+   type Address {
+      addressLine: String!
+      zip: String!
+      city: String!
+      region: String
+      country: String!
+   }
+
+   type Account {
+      id: ID!
+      email: String!
+      role: String!
+   }
+
+   type Profile {
+      id: ID!
+      firstName: String
+      lastName: String
+      phone: String
+      birthDate: String
+      gender: String
+      address: Address
+      about: String
+      account: Account!
+   }
+
    type ArtworkPage {
       artwork: Artwork!
       artist: Artist!
@@ -48,6 +76,7 @@ export const typeDefs = gql`
       artists: [Artist]!
       artworkPage(artworkId: ID!): ArtworkPage!
       artistPage(artistId: ID!): ArtistPage!
+      profile(accountId: ID!): Profile
    }
 `;
 
@@ -58,18 +87,28 @@ export const resolvers = {
          return await artworkData.countByArtist(parent.id);
       },
    },
+   Profile: {
+      account: async (parent) => {
+         const account = accountData.fetchById(parent.accountId);
+         return account;
+      },
+   },
    Query: {
+      profile: async (_, { accountId }) => {
+         const profile = await profileData.fetchByAccountId(accountId);
+         return profile;
+      },
       artwork: async (_, { id }) => {
-         const result = await artworkData.fetchById(id);
-         return result;
+         const artwork = await artworkData.fetchById(id);
+         return artwork;
       },
       artworks: async (_, { search }) => {
-         const result = await artworkData.fetch(search);
-         return result;
+         const artworks = await artworkData.fetch(search);
+         return artworks;
       },
       artist: async (_, { id }) => {
-         const result = await artistData.fetchById(id);
-         return result;
+         const artist = await artistData.fetchById(id);
+         return artist;
       },
       artists: () => artistData.fetchAll(),
       artworkPage: async (_, { artworkId }) => {
