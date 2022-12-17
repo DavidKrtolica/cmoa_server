@@ -1,4 +1,5 @@
 import db from '../knex.js';
+import * as Sentry from '@sentry/node';
 
 export const fetchById = async (id) => {
    return await db.select('*').from('artwork').where('id', id).first();
@@ -13,14 +14,18 @@ export const fetchByArtist = async (artistId) => {
 };
 
 export const fetch = async (search) => {
-   const query = db.select('artwork.*').from('artwork');
-   if (search) {
-      query
-         .whereILike('title', `%${search}%`)
-         .orWhereILike('medium', `%${search}%`)
-         .orWhereILike('curatorDescription', `%${search}%`);
+   try {
+      const query = db.select('artwork.*').from('artwork');
+      if (search) {
+         query
+            .whereILike('title', `%${search}%`)
+            .orWhereILike('medium', `%${search}%`)
+            .orWhereILike('curatorDescription', `%${search}%`);
+      }
+      return await query;
+   } catch(err) {
+      Sentry.captureException(err);
    }
-   return await query;
 };
 
 export const countByArtist = async (artistId) => {
