@@ -78,6 +78,29 @@ export const typeDefs = gql`
       artistPage(artistId: ID!): ArtistPage!
       profile(accountId: ID!): Profile
    }
+
+   input AddressInput {
+      addressLine: String!
+      zip: String!
+      city: String!
+      region: String
+      country: String!
+   }
+
+   input ProfileInput {
+      firstName: String!
+      lastName: String!
+      phone: String!
+      birthDate: String!
+      gender: String!
+      address: AddressInput!
+      about: String!
+      accountId: ID!
+   }
+
+   type Mutation {
+      saveProfile(profile: ProfileInput!, profileId: ID): Boolean!
+   }
 `;
 
 // Resolvers for the types defined in the schema
@@ -126,6 +149,20 @@ export const resolvers = {
             artist,
             artworks,
          };
+      },
+   },
+   Mutation: {
+      saveProfile: async (_, { profile, profileId }) => {
+         try {
+            if (!profileId) {
+               await profileData.createProfile(profile);
+            } else {
+               await profileData.updateProfile(profileId, profile);
+            }
+            return true;
+         } catch (error) {
+            return false;
+         }
       },
    },
 };
