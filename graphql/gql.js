@@ -98,8 +98,32 @@ export const typeDefs = gql`
       accountId: ID!
    }
 
+   input ArtistInput {
+      fullName: String!
+      citedName: String!
+      nationality: String!
+      birthDate: String!
+      birthPlace: String!
+      deathPlace: String   
+   }
+
+   input ArtworkInput {
+      title: String!
+      creationYear: Int!
+      medium: String!
+      curatorDescription: String!
+      itemHeight: Float
+      itemWidth: Float
+      itemDepth: Float
+      itemDiameter: Float
+      artistNote: String
+      image: String!
+   }
+
    type Mutation {
       saveProfile(profile: ProfileInput!, profileId: ID): Boolean!
+      saveArtist(artist: ArtistInput!): String!
+      saveArtwork(artist: ArtistInput!, artwork: ArtworkInput!, artworkId: ID): Boolean!
    }
 `;
 
@@ -158,6 +182,27 @@ export const resolvers = {
                await profileData.createProfile(profile);
             } else {
                await profileData.updateProfile(profileId, profile);
+            }
+            return true;
+         } catch (error) {
+            return false;
+         }
+      },
+      saveArtist: async (_, { artist }) => {
+         try {
+            const result = await artistData.createArtist(artist);
+            return result[0].id;
+         } catch (error) {
+            return "Error: "+error;
+         }
+      },
+      saveArtwork: async (_, { artist, artwork, artworkId }) => {
+         try {
+            if (!artworkId) {
+               const result = await artistData.createArtist(artist);
+               await artworkData.createArtwork({ ...artwork, submittedAt: new Date(), creatorId: result[0].id });
+            } else {
+               await artworkData.updateArtwork(artworkId, artwork);
             }
             return true;
          } catch (error) {

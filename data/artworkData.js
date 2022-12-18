@@ -36,3 +36,11 @@ export const countByArtist = async (artistId) => {
       .first();
    return Number(result.count);
 };
+
+export const createArtwork = async (artwork) => {
+   return await db('artwork').insert(artwork);
+};
+
+export const updateArtwork = async (artworkId, artwork) => {
+   return await db('artwork').update(artwork).where('id', artworkId);
+};

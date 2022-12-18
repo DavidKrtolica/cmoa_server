@@ -24,3 +24,7 @@ export const fetchByArtworkId = async (artworkId) => {
       .where('artwork.id', artworkId)
       .first();
 };
+
+export const createArtist = async (artist) => {
+   return await db('artist').insert(artist).returning('id');
+};
